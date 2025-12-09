@@ -2,7 +2,7 @@ import pandas as pd
 import re
 import requests
 import nltk
-from nltk.tokenize import word_tokenize # Sudah ada di sini
+from nltk.tokenize import word_tokenize
 from io import BytesIO
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
@@ -11,16 +11,29 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 # 1. SETUP GLOBAL NLTK DAN INISIALISASI OBJEK
 # ----------------------------------------------------
 
+# --- A. Resource Download (Dilakukan sekali saat script dimulai) ---
+# Mengunduh 'punkt' (Sudah diperbaiki dari masalah LookupError sebelumnya)
 try:
     nltk.data.find('tokenizers/punkt')
-except LookupError: # Ganti nltk.downloader.DownloadError dengan LookupError
+except LookupError:
     print("Mengunduh punkt...")
     nltk.download('punkt')
     
+# --- TAMBAHKAN BLOK INI UNTUK MENGUNDUH 'punkt_tab' ---
+# Mengunduh 'punkt_tab' (Untuk mengatasi error pada gambar)
+try:
+    # Menggunakan path yang dicari oleh error: 'tokenizers/punkt_tab'
+    # Jika NLTK mencari subpath lain, coba tangkap LookupError dan download
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError: 
+    print("Mengunduh punkt_tab...")
+    # Pesan error menyarankan nltk.download('punkt_tab')
+    nltk.download('punkt_tab')
+
 # Mengunduh 'stopwords'
 try:
     nltk.data.find('corpora/stopwords')
-except LookupError: # Ganti nltk.downloader.DownloadError dengan LookupError
+except LookupError:
     print("Mengunduh stopwords...")
     nltk.download('stopwords')
 # --- B. Inisialisasi Objek (Dilakukan sekali setelah download) ---
