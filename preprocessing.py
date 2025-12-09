@@ -8,31 +8,9 @@ from io import BytesIO
 from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-# ====================================================
-# 1. SETUP GLOBAL NLTK, PATH, DAN INISIALISASI OBJEK
-# ====================================================
-
-# --- A. Konfigurasi Path NLTK (Penting untuk deployment seperti Streamlit) ---
-# Mengatur NLTK_DATA agar resource tersimpan di lokasi yang pasti dapat diakses
-if 'NLTK_DATA' not in os.environ:
-    os.environ['NLTK_DATA'] = os.path.join(os.getcwd(), 'nltk_data')
-    if not os.path.exists(os.environ['NLTK_DATA']):
-        os.makedirs(os.environ['NLTK_DATA'])
-
-# --- B. Resource Download (Dilakukan sekali saat script dimulai) ---
-# Mengunduh 'punkt'
-try:
-    nltk.data.find('tokenizers/punkt')
-except (nltk.downloader.DownloadError, LookupError):
-    print("Mengunduh punkt...")
-    nltk.download('punkt')
-    
-# Mengunduh 'stopwords'
-try:
-    nltk.data.find('corpora/stopwords')
-except (nltk.downloader.DownloadError, LookupError):
-    print("Mengunduh stopwords...")
-    nltk.download('stopwords')
+# NLTK cukup pintar untuk tidak mengunduh ulang jika sudah ada.
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
 
 # --- C. Inisialisasi Objek (Dilakukan sekali setelah download) ---
 print("✅ Inisialisasi Stopwords dan Stemmer...")
